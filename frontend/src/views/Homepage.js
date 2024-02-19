@@ -38,7 +38,7 @@ function Homepage() {
         </div>
       </main>
       <footer className="container">
-        <p>© Company 2017-2024</p>
+        <p>© doshan 2023-2024</p>
       </footer>
     </div>
   );
