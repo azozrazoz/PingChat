@@ -15,8 +15,6 @@ function MessageDetail() {
   let [newMessage, setnewMessage] = useState({ message: "" });
   let [newSearch, setnewSearch] = useState({ search: "" });
 
-
-
   const axios = useAxios();
   const id = useParams();
   const token = localStorage.getItem("authTokens");
@@ -46,6 +44,10 @@ function MessageDetail() {
   };
 
   useEffect(() => {
+    scrollToBottom();
+  }, [newMessage])
+
+  useEffect(() => {
     try {
       axios.get(baseURL + "/my-messages/" + user_id + "/").then((res) => {
         setMessages(res.data);
@@ -56,12 +58,15 @@ function MessageDetail() {
   }, []);
 
   // Get all messages for a conversation
-  useEffect(() => {
-    let interval = setInterval(() => {
+  useEffect( () => {
+    let interval = setInterval(async () => {
       try {
-        axios
+        await axios
           .get(baseURL + "/get-messages/" + user_id + "/" + id.id + "/")
           .then((res) => {
+            if (message.length > res.data.length) {
+              scrollToBottom();
+            }
             setMessage(res.data);
           });
       } catch (error) {
@@ -96,10 +101,10 @@ function MessageDetail() {
   };
 
   // Send Message
-  const SendMessage = (event) => {
+  const SendMessage = async (event) => {
     event.preventDefault();
 
-    if (newMessage.message !== null && newMessage.message !== '') {
+    if (newMessage.message !== null && newMessage.message !== "") {
       const formdata = new FormData();
       formdata.append("user", user_id);
       formdata.append("sender", user_id);
@@ -108,7 +113,7 @@ function MessageDetail() {
       formdata.append("is_read", false);
 
       try {
-        axios.post(baseURL + "/send-messages/", formdata).then((res) => {
+        await axios.post(baseURL + "/send-messages/", formdata).then((res) => {
           document.getElementById("text-input").value = "";
           setnewMessage((newMessage = ""));
         });
@@ -138,6 +143,7 @@ function MessageDetail() {
       })
       .catch((error) => {
         alert("User Does Not Exist");
+        console.log(error);
       });
   };
 
@@ -321,7 +327,7 @@ function MessageDetail() {
                   </div>
                 </div>
                 <div className="flex-grow-0 py-3 px-4 border-top">
-                  <form onSubmit={SendMessage} className="input-group">
+                  <form className="input-group">
                     <input
                       type="text"
                       className="form-control"

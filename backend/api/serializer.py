@@ -59,7 +59,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = [ 'id',  'user',  'full_name', 'image' ]
+        fields = [ 'id',  'user',  'full_name', 'image', 'bio' ]
     
     def __init__(self, *args, **kwargs):
         super(ProfileSerializer, self).__init__(*args, **kwargs)

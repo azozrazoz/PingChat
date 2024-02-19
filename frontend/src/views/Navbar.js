@@ -75,7 +75,7 @@ function Navbar() {
                   <li class="nav-item">
                     <Link
                       class="nav-link"
-                      to="/profile"
+                      to={"/profile/" + user.user_id}
                       style={{ cursor: "pointer" }}
                     >
                       <Person />
