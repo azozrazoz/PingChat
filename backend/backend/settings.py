@@ -98,6 +98,15 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
+    
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.postgresql',
+    #     'NAME': 'pingchat_db',
+    #     'USER': 'postgres',
+    #     'PASSWORD': '123qwerty',
+    #     'HOST': 'localhost',
+    #     'PORT': '5432',
+    # }
 }
 
 

@@ -15,6 +15,8 @@ function MessageDetail() {
   let [newMessage, setnewMessage] = useState({ message: "" });
   let [newSearch, setnewSearch] = useState({ search: "" });
 
+
+
   const axios = useAxios();
   const id = useParams();
   const token = localStorage.getItem("authTokens");
@@ -22,12 +24,28 @@ function MessageDetail() {
   const user_id = decoded.user_id;
   const history = useHistory();
 
+  const messagesEndRef = useRef(null);
+
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const clickOnChat = (event) => {
+    event.preventDefault();
+    switch (event.detail) {
+      case 1: {
+        console.log('single click');
+        break;
+      }
+      case 2: {
+        console.log('double click');
+        scrollToBottom();
+        break;
+      }
+    }
+  };
+
   useEffect(() => {
-    scrollToBottom();
     try {
       axios.get(baseURL + "/my-messages/" + user_id + "/").then((res) => {
         setMessages(res.data);
@@ -35,7 +53,7 @@ function MessageDetail() {
     } catch (error) {
       console.log(error);
     }
-  }, [message]);
+  }, []);
 
   // Get all messages for a conversation
   useEffect(() => {
@@ -45,7 +63,6 @@ function MessageDetail() {
           .get(baseURL + "/get-messages/" + user_id + "/" + id.id + "/")
           .then((res) => {
             setMessage(res.data);
-            console.log(res.data);
           });
       } catch (error) {
         console.log(error);
@@ -54,7 +71,7 @@ function MessageDetail() {
     return () => {
       clearInterval(interval);
     };
-  }, [message]);
+  }, []);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -68,7 +85,7 @@ function MessageDetail() {
       }
     };
     fetchProfile();
-  }, [message]);
+  }, []);
 
   // capture changes made by the user in those fields and update the component's state accordingly.
   const handleChange = (event) => {
@@ -124,7 +141,6 @@ function MessageDetail() {
       });
   };
 
-  const messagesEndRef = useRef(null);
 
   return (
     <div>
@@ -184,6 +200,7 @@ function MessageDetail() {
                             alt="1"
                             width={40}
                             height={40}
+                            style={{ objectFit: "cover" }}
                           />
                         )}
                         {message.sender.id === user_id && (
@@ -193,6 +210,7 @@ function MessageDetail() {
                             alt="2"
                             width={40}
                             height={40}
+                            style={{ objectFit: "cover" }}
                           />
                         )}
                         <div className="flex-grow-1 ml-3">
@@ -212,7 +230,7 @@ function MessageDetail() {
                   ))}
                 </div>
               </div>
-              <div className="col-12 col-lg-7 col-xl-9">
+              <div onClick={clickOnChat} className="col-12 col-lg-7 col-xl-9">
                 <div className="py-2 px-4 border-bottom d-none d-lg-block">
                   <div className="d-flex align-items-center py-1">
                     <div className="position-relative">
@@ -258,13 +276,13 @@ function MessageDetail() {
                               </div>
                               {message.message}
                               <br />
-                              <span className="mt-3">
+                              <div className="text-muted small text-nowrap mt-2">
                                 {moment
                                   .utc(message.date)
                                   .local()
                                   .startOf("seconds")
                                   .fromNow()}
-                              </span>
+                              </div>
                             </div>
                           </div>
                         )}
@@ -274,11 +292,18 @@ function MessageDetail() {
                               <img
                                 src={message.sender_profile.image}
                                 className="rounded-circle mr-1"
-                                alt={message.reciever_profile.full_name}
+                                alt="Chris Wood"
                                 style={{ objectFit: "cover" }}
                                 width={40}
                                 height={40}
                               />
+                              <div className="text-muted small text-nowrap mt-2"></div>
+                            </div>
+                            <div className="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
+                              <div className="font-weight-bold mb-1">
+                                You
+                              </div>
+                              {message.message}
                               <br />
                               <div className="text-muted small text-nowrap mt-2">
                                 {moment
@@ -287,10 +312,6 @@ function MessageDetail() {
                                   .startOf("seconds")
                                   .fromNow()}
                               </div>
-                            </div>
-                            <div className="flex-shrink-1 bg-light rounded py-2 px-3 ml-3">
-                              <div className="font-weight-bold mb-1">You</div>
-                              {message.message}
                             </div>
                           </div>
                         )}
