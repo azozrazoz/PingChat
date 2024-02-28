@@ -46,7 +46,7 @@ class ChatMessage(models.Model):
     sender = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="sender")
     reciever = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="reciever")
 
-    message = models.CharField(max_length=100000)
+    message = models.CharField()
 
     is_read = models.BooleanField(default=False)
     date = models.DateTimeField(auto_now_add=True)

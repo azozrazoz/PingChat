@@ -109,7 +109,7 @@ function MessageDetail() {
       formdata.append("user", user_id);
       formdata.append("sender", user_id);
       formdata.append("reciever", id.id);
-      formdata.append("message", newMessage.message);
+      formdata.append("message", newMessage);
       formdata.append("is_read", false);
 
       try {
