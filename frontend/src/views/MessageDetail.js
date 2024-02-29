@@ -114,7 +114,7 @@ function MessageDetail() {
 
       try {
         await axios.post(baseURL + "/send-messages/", formdata).then((res) => {
-          document.getElementById("text-input").value = "";
+          // document.getElementById("text-input").value = "";
           setnewMessage((newMessage = ""));
         });
       } catch (error) {

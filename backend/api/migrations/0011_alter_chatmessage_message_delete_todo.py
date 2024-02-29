@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='chatmessage',
             name='message',
-            field=models.TextField(max_length=1000),
+            field=models.TextField(max_length=255),
         ),
         migrations.DeleteModel(
             name='Todo',

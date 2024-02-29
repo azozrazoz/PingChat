@@ -32,7 +32,7 @@ function SearchUsers() {
           showCancelButton: true,
         });
       });
-  }, [axios, username.username]);
+  }, []);
 
   const handleSearchChange = (event) => {
     setnewSearch({

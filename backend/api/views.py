@@ -98,13 +98,16 @@ class SearchUser(generics.ListAPIView):
 
     def list(self, request, *args, **kwargs):
         username = self.kwargs['username']
+        
         logged_in_user = self.request.user
-        users = Profile.objects.filter(Q(user__username__icontains=username) | Q(full_name__icontains=username) | Q(user__email__icontains=username) & 
-                                       ~Q(user=logged_in_user))
+        
+        users = Profile.objects.filter(~Q(user=logged_in_user) & Q(user__username__icontains=username) 
+                                       | Q(full_name__icontains=username) 
+                                       | Q(user__email__icontains=username))
 
         if not users.exists():
             return Response(
-                {"detail": "No users found."},
+                { "detail": "No users found." },
                 status=status.HTTP_404_NOT_FOUND
             )
 
